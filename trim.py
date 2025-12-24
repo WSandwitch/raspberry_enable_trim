@@ -200,7 +200,17 @@ else:
                 'Invalid provisioning mode in %s: %s' % (strPath, strMode)
             )
 
-    ulDiscardMaxBytes = ulMaxUnmapLBACount*ulLogicalBlockLength
+    strPath = os.path.join(
+        strSysBlockLink,
+        'queue',
+        'discard_granularity'
+    )
+
+    tFile = open(strPath, 'rt')
+    granularity=int(tFile.read())
+    tFile.close()
+
+    ulDiscardMaxBytes = ulMaxUnmapLBACount*ulLogicalBlockLength//granularity*granularity
     strPath = os.path.join(
         strSysBlockLink,
         'queue',
